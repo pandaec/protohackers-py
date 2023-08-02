@@ -31,7 +31,7 @@ async def handle_client(client):
         if data == "":
             break
 
-        lines = data.split("\n")
+        lines = [x for x in data.split("\n") if x]
         if lines[-1:][-1:] != "\n":
             data = data[-1:]
             lines = lines[:-1]
