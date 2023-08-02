@@ -27,24 +27,30 @@ async def handle_client(client):
     loop = asyncio.get_event_loop()
     data = ""
     while True:
-        data += (await loop.sock_recv(client, bufsize)).decode("utf8")
-        line = data.split("\n")[0]
-        if not line:
+        data += (await loop.sock_recv(client, bufsize)).decode()
+        if data == "":
             break
-        o = json.loads(line)
-        print(o)
-        method = o.get("isMethod")
-        number = o.get("number")
-        if method != "isPrime" or type(number) != "number":
-            # malform request
-            await loop.sock_sendall(client, line.encode())
 
-        res = {"method": "isPrime"}
-        res["prime"] = await is_prime(number)
+        lines = data.split("\n")
+        if lines[-1:][-1:] != "\n":
+            data = data[:-1]
+            lines = lines[:-1]
 
-        response = json.dumps(res)
-        print(response)
-        await loop.sock_sendall(client, response.encode())
+        for line in lines:
+            o = json.loads(line)
+            print(o)
+            method = o.get("isMethod")
+            number = o.get("number")
+            if method != "isPrime" or type(number) != "number":
+                # malform request
+                await loop.sock_sendall(client, line.encode())
+
+            res = {"method": "isPrime"}
+            res["prime"] = await is_prime(number)
+
+            response = json.dumps(res)
+            print(response)
+            await loop.sock_sendall(client, response.encode())
     client.close()
 
 
