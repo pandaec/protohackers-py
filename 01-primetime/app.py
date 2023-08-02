@@ -33,7 +33,7 @@ async def handle_client(client):
 
         lines = data.split("\n")
         if lines[-1:][-1:] != "\n":
-            data = data[:-1]
+            data = data[-1:]
             lines = lines[:-1]
 
         for line in lines:
