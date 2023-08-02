@@ -27,7 +27,7 @@ async def handle_client(client):
     loop = asyncio.get_event_loop()
     data = ""
     while True:
-        data += (await loop.sock_recv(client, bufsize).encode("utf8"))
+        data += await loop.sock_recv(client, bufsize)
         line = data.split("\n")[0]
         if not line:
             break
