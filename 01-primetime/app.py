@@ -37,14 +37,14 @@ async def handle_client(client):
         number = o.get("number")
         if method != "isPrime" or type(number) != "number":
             # malform request
-            await loop.send_all(client, line)
+            await loop.sock_sendall(client, line)
 
         res = {"method": "isPrime"}
         res["prime"] = await is_prime(number)
 
         response = json.dumps(res)
         print(response)
-        await loop.send_all(client, response)
+        await loop.sock_sendall(client, response)
     client.close()
 
 
