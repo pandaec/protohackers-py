@@ -2,7 +2,7 @@ import socket
 import argparse
 
 host = "0.0.0.0"
-bufsize = 20000
+bufsize = 4_000_000
 backlog = 10
 
 def echo_server(port):
