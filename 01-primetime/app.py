@@ -32,8 +32,9 @@ async def handle_client(client):
         if not line:
             break
         o = json.loads(line)
-        method = o["isMethod"]
-        number = o["number"]
+        print(o)
+        method = o.get("isMethod")
+        number = o.get("number")
         if method != "isPrime" or type(number) != "number":
             # malform request
             await loop.send_all(client, line)
