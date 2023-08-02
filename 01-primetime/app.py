@@ -68,4 +68,4 @@ if __name__ == "__main__":
     parser.add_argument("--port", action="store", dest="port", type=int, required=True)
     given_args = parser.parse_args()
     port = given_args.port
-    run_server(port)
+    asyncio.run(run_server(port))
