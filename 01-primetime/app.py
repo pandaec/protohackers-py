@@ -32,9 +32,9 @@ async def handle_client(client):
             break
 
         lines = [x for x in data.split("\n") if x]
-        if lines[-1:][-1:] != "\n":
-            data = data[-1:]
-            lines = lines[:-1]
+        # if lines[-1:][-1:] != "\n":
+        #     data = data[-1:]
+        #     lines = lines[:-1]
 
         for line in lines:
             o = json.loads(line)
