@@ -29,8 +29,10 @@ async def handle_client(client):
     loop = asyncio.get_event_loop()
     while True:
         data = ""
-        while d := await loop.sock_recv(client, bufsize):
-            data += d.decode()
+        while d := (await loop.sock_recv(client, bufsize)).decode():
+            data += d
+            if d and d[-1] == '\n':
+                break
 
         if data == "":
             break
