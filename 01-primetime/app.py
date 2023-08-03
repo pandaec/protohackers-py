@@ -30,8 +30,15 @@ async def handle_client(client):
         if data == "":
             break
 
-        o = json.loads(data)
-        print(o)
+        print(data)
+        try:
+            o = json.loads(data)
+        except Exception as e:
+            # malform request
+            await loop.sock_sendall(client, data.encode())
+            client.close()
+            return
+
         method = o.get("method")
         number = o.get("number")
         if method != "isPrime" or type(number) != int:
