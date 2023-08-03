@@ -5,7 +5,7 @@ import json
 from math import floor, sqrt
 
 host = "0.0.0.0"
-bufsize = 2048
+bufsize = 8192
 
 
 async def is_prime(n):
@@ -32,7 +32,7 @@ async def handle_client(client):
         while True:
             d = (await loop.sock_recv(client, bufsize)).decode()
             data += d
-            if d == "" or "\n" in d:
+            if d[-1] == "" or "\n" in d:
                 break
         if data == "":
             break
