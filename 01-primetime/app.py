@@ -28,12 +28,9 @@ def is_prime_sync(n):
 async def handle_client(client):
     loop = asyncio.get_event_loop()
     while True:
-        data = ""
-        while True:
-            d = (await loop.sock_recv(client, bufsize)).decode()
-            data += d
-            if not d or d[-1] == "" or "\n" in d:
-                break
+        while d := await loop.sock_recv(client, bufsize):
+            data += d.decode()
+
         if data == "":
             break
 
