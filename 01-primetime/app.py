@@ -43,7 +43,7 @@ async def handle_client(client):
         res = {"method": "isPrime"}
         res["prime"] = await is_prime(number)
 
-        response = json.dumps(res)
+        response = json.dumps(res) + "\n"
         print(response)
         await loop.sock_sendall(client, response.encode())
     client.close()
