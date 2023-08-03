@@ -28,6 +28,7 @@ def is_prime_sync(n):
 async def handle_client(client):
     loop = asyncio.get_event_loop()
     while True:
+        data = ""
         while d := await loop.sock_recv(client, bufsize):
             data += d.decode()
 
