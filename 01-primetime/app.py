@@ -25,13 +25,13 @@ def is_prime_sync(n):
 
 async def handle_client(client):
     loop = asyncio.get_event_loop()
-    data = ""
     while True:
-        data += (await loop.sock_recv(client, bufsize)).decode()
+        data = (await loop.sock_recv(client, bufsize)).decode()
         if data == "":
             break
 
-        lines = [x for x in data.split("\n") if x]
+        lines = [data]
+        # lines = [x for x in data.split("\n") if x]
         # if lines[-1:][-1:] != "\n":
         #     data = data[-1:]
         #     lines = lines[:-1]
@@ -44,6 +44,8 @@ async def handle_client(client):
             if method != "isPrime" or type(number) != "number":
                 # malform request
                 await loop.sock_sendall(client, line.encode())
+                client.close()
+                return
 
             res = {"method": "isPrime"}
             res["prime"] = await is_prime(number)
