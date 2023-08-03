@@ -5,7 +5,7 @@ import json
 from math import floor, sqrt
 
 host = "0.0.0.0"
-bufsize = 2048
+bufsize = 8*1024*1024
 
 
 async def is_prime(n):
