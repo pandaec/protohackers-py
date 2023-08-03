@@ -32,7 +32,7 @@ async def handle_client(client):
         while True:
             d = (await loop.sock_recv(client, bufsize)).decode()
             data += d
-            if d == "":
+            if d == "" or "\n" in d:
                 break
         if data == "":
             break
