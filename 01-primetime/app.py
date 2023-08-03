@@ -13,6 +13,8 @@ async def is_prime(n):
 
 
 def is_prime_sync(n):
+    if type(n) != int:
+        return False
     if n == 2 or n == 3:
         return True
     if n <= 1 or n % 2 == 0:
@@ -43,13 +45,14 @@ async def handle_client(client):
 
             method = o.get("method")
             number = o.get("number")
-            if method != "isPrime" or type(number) != int:
+            if method != "isPrime" or type(number) not in [int, float] :
                 # malform request
                 await loop.sock_sendall(client, data.encode())
                 client.close()
                 return
 
-            res = {"method": "isPrime"}
+            isp = await is_prime(number)
+            res = dict(method="isPrime", prime=isp)
             res["prime"] = await is_prime(number)
 
             response = json.dumps(res) + "\n"
