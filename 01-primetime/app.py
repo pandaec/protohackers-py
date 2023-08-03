@@ -5,7 +5,7 @@ import json
 from math import floor, sqrt
 
 host = "0.0.0.0"
-bufsize = 8*1024*1024*100
+bufsize = 2048
 
 
 async def is_prime(n):
@@ -28,7 +28,12 @@ def is_prime_sync(n):
 async def handle_client(client):
     loop = asyncio.get_event_loop()
     while True:
-        data = (await loop.sock_recv(client, bufsize)).decode()
+        data = ""
+        while True:
+            d = (await loop.sock_recv(client, bufsize)).decode()
+            data += d
+            if d == "":
+                break
         if data == "":
             break
 
@@ -45,7 +50,7 @@ async def handle_client(client):
 
             method = o.get("method")
             number = o.get("number")
-            if method != "isPrime" or type(number) not in [int, float] :
+            if method != "isPrime" or type(number) not in [int, float]:
                 # malform request
                 await loop.sock_sendall(client, data.encode())
                 client.close()
