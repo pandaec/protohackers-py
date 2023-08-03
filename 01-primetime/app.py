@@ -30,29 +30,22 @@ async def handle_client(client):
         if data == "":
             break
 
-        lines = [data]
-        # lines = [x for x in data.split("\n") if x]
-        # if lines[-1:][-1:] != "\n":
-        #     data = data[-1:]
-        #     lines = lines[:-1]
+        o = json.loads(data)
+        print(o)
+        method = o.get("method")
+        number = o.get("number")
+        if method != "isPrime" or type(number) != int:
+            # malform request
+            await loop.sock_sendall(client, data.encode())
+            client.close()
+            return
 
-        for line in lines:
-            o = json.loads(line)
-            print(o)
-            method = o.get("method")
-            number = o.get("number")
-            if method != "isPrime" or type(number) != "number":
-                # malform request
-                await loop.sock_sendall(client, line.encode())
-                client.close()
-                return
+        res = {"method": "isPrime"}
+        res["prime"] = await is_prime(number)
 
-            res = {"method": "isPrime"}
-            res["prime"] = await is_prime(number)
-
-            response = json.dumps(res)
-            print(response)
-            await loop.sock_sendall(client, response.encode())
+        response = json.dumps(res)
+        print(response)
+        await loop.sock_sendall(client, response.encode())
     client.close()
 
 
